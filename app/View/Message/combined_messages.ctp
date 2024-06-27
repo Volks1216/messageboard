@@ -212,38 +212,41 @@
         <?php foreach ($messages as $message): ?>
             <div class="message-row <?php echo $message['Message']['sender_id'] == $userId ? 'sent' : 'received'; ?>">
                 <div class="message <?php echo $message['Message']['sender_id'] == $userId ? 'sent' : 'received'; ?>">
-                <div class="user-info">
+                    <div class="user-info">
+                        <?php 
+                        if ($message['Message']['sender_id'] == $userId) {
+                            $label = 'Sent to:'; 
+                            $user = $message['Recipient'];
+                        } else {
+                            $label = 'Message from :'; 
+                            $user = $message['Sender'];
+                        }
 
-                <?php 
-                if ($message['Message']['sender_id'] == $userId) {
-                    $label = 'Sent to:'; 
-                    $user = $message['Recipient'];
-                } else {
-                    $label = 'Message from :'; 
-                    $user = $message['Sender'];
-                }
+                        $picture = !empty($user['picture']) ? $this->Html->url('/' . h($user['picture']), true) : $this->Html->url('/path/to/default_image.jpg', true);
+                        ?>
 
-                $picture = !empty($user['picture']) ? $this->Html->url('/' . h($user['picture']), true) : $this->Html->url('/path/to/default_image.jpg', true);
-                ?>
-
-                <img src="<?php echo $picture; ?>" alt="User Picture">
-                <div>
-                    <p><?php echo h($user['name']); ?></p>
-                </div>
-            </div>
-            <p><?php echo h($message['Message']['message']); ?></p>
-                <div class="meta-info">
-                    <p><?php echo $label . ' ' . h($user['name']); ?></p>
-                    <p><?php echo h($message['Message']['created']); ?></p>
-                </div>
-                <div class="message-actions">
-                    <button class="reply" data-message-id="<?php echo $message['Message']['id']; ?>">Reply</button>
-                    <button class="delete" data-message-id="<?php echo $message['Message']['id']; ?>">Delete</button>
-                </div>
-                <div class="reply-form-container" style="display: none;">
-                    <textarea class="reply-message" placeholder="Type your reply here..." name="message"></textarea>
-                    <button class="send-reply" data-message-id="<?php echo $message['Message']['id']; ?>">Send</button>
-                </div>
+                        <div class="user-profile-link">
+                            <a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'profile', $user['id']]); ?>">
+                                <img src="<?php echo $picture; ?>" alt="User Picture">
+                            </a>
+                        </div>
+                        <div>
+                            <p><?php echo h($user['name']); ?></p>
+                        </div>
+                    </div>
+                    <p><?php echo h($message['Message']['message']); ?></p>
+                    <div class="meta-info">
+                        <p><?php echo $label . ' ' . h($user['name']); ?></p>
+                        <p><?php echo h($message['Message']['created']); ?></p>
+                    </div>
+                    <div class="message-actions">
+                        <button class="reply" data-message-id="<?php echo $message['Message']['id']; ?>">Reply</button>
+                        <button class="delete" data-message-id="<?php echo $message['Message']['id']; ?>">Delete</button>
+                    </div>
+                    <div class="reply-form-container" style="display: none;">
+                        <textarea class="reply-message" placeholder="Type your reply here..." name="message"></textarea>
+                        <button class="send-reply" data-message-id="<?php echo $message['Message']['id']; ?>">Send</button>
+                    </div>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -253,7 +256,7 @@
 </div>
 
 <div class="show-more" id="show-more-btn">Show More</div>
-<div class="show-less" id="show-less-btn" style="display: none;">Show Less</div>
+<div class="show-less" id="show-less-btn" style="display: none;">Back</div>
 <h2>Add New Message</h2>
 <form id="new-message-form">
     <div>

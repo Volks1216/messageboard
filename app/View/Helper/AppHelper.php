@@ -31,3 +31,9 @@ App::uses('Helper', 'View');
  */
 class AppHelper extends Helper {
 }
+
+class UrlHelper extends AppHelper {
+    public function build($url = null, $full = false) {
+        return Router::url($url, $full);
+    }
+}

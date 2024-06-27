@@ -89,6 +89,7 @@
 <?php if (!empty($this->request->data['Users']['picture'])): ?>
     <img src="<?php echo $this->Html->url('/' . $this->request->data['Users']['picture']); ?>" alt="User Picture" class="user-picture">
 <?php endif; ?>
+
 <?php
 echo $this->Form->create('Users', ['type' => 'file']);
 
@@ -105,10 +106,16 @@ echo $this->Form->input('gender', [
 ]);
 echo $this->Form->input('hobby', ['label' => 'Hobby']);
 
+// Add input fields for changing password and email
+echo $this->Form->input('email', ['label' => 'Email']);
+echo $this->Form->input('password', ['type' => 'password', 'label' => 'New Password']);
+echo $this->Form->input('password', ['type' => 'password', 'label' => 'Confirm Password']);
+
 echo $this->Form->submit('Update', ['class' => 'btn btn-primary']);
 
 echo $this->Form->end();
 ?>
+
 
 <script>
     $(document).ready(function() {

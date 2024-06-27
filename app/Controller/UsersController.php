@@ -110,9 +110,12 @@ App::uses('AppController', 'Controller');
                 if (!empty($this->request->data['Users']['birthdate'])) {
                     $this->request->data['Users']['birthdate'] = date('Y-m-d', strtotime($this->request->data['Users']['birthdate']));
                 }
+
+                $hashedPassword = password_hash($this->request->data['Users']['password'], PASSWORD_DEFAULT);
+                $this->request->data['Users']['password'] = $hashedPassword;
+                $this->request->data['Users']['confirm_password'] = $hashedPassword;
         
-        
-                $fieldsToSave = ['name', 'email', 'gender', 'hobby', 'picture', 'birthdate'];
+                $fieldsToSave = ['name', 'email', 'gender', 'hobby', 'picture', 'birthdate', 'password'];
         
                 if ($this->Users->save($this->request->data, ['fieldList' => $fieldsToSave])) {
                     $this->Flash->success("Success: User saved!");
@@ -126,7 +129,7 @@ App::uses('AppController', 'Controller');
             }
         }                
 
-        public function profile() {
+        public function profile($id = null) {
             $user = $this->Session->read('Auth.User');
             //debug($this->Session->read('Auth.Users'));
             $this->set('user', $user);
